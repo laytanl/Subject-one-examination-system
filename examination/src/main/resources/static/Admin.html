@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>科目一考试系统</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
+        crossorigin="anonymous">
+</head>
+
+<body class="mb-5">
+    <div id="app" class="container-fluid px-0">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">后台管理系统</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="Admin">首页
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="item">题目管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="grade">分数查询</a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <h4 class="text-light mx-3">欢迎您,{{username}}</h4>
+                    <a class="btn btn-outline-light my-2 my-sm-0" href="Login" role="button">退出</a>
+                </form>
+            </div>
+        </nav>
+        <div class="row mt-5">
+            <div class="col-lg-6 m-auto">
+                <div class="card">
+                    <div class="card-body m-auto">
+                        <h1 class="display-4">Hello,{{username}}</h1>
+                        <h2>欢迎来到后台管理页面</h2>
+                        <h4 class="card-title my-3 mx-3">请选择你需要的操作</h4>
+                        <p class="lead">
+                            <a class="btn btn-primary btn-lg mx-3 my-4" href="item" role="button">题目管理</a>
+                            <a class="btn btn-primary btn-lg mx-3 my-4" href="grade" role="button">分数查询</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="jumbotron jumbotron-fluid mb-0 mt-5 py-1 fixed-bottom bg-dark clearfix">
+        <div class="container py-1">
+            <h1 class="text-center align-text-bottom text-light" style="font-size: 10px;">Copyright(c)2018 newer 版权所有</h1>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                username: '',
+            },
+            mounted() {
+
+                axios.get("/user/session")
+                    .then((response) => {
+                        console.log(response.data);
+                        this.username = response.data;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+
+                    })
+            },
+        })
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

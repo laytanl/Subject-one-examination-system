@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>科目一考试系统</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
+        crossorigin="anonymous">
+
+</head>
+
+
+<body style="background-image:url(bg2.jpg);width:100%;height:100%; background-repeat: no-repeat;background-size: cover;">
+
+<!-- <body> -->
+    <div id="app" class="container-fluid ">
+        <nav class="nav navbar-light border-bottom border-dark " style="background-color:rgba(0,0,0,0)">
+            <div class="m-auto" style="font-size:50px;color: #4a3d34;">科目一考试系统</div>
+
+        </nav>
+        <div class="row mt-3 ">
+            <div class="col-lg-4 shadow-lg py-3 rounded offset-lg-7 ">
+                <div class="card text-white mb-3 " style="background-color:rgba(255,255,255,0.5); ">
+                    <div class="card-header text-center text-dark ">
+                        <span style="font-size:30px; font-style: initial ">注册</span>
+                    </div>
+                    <div class="card-body ">
+                        <form action="/user/register" method="post">
+                            <div class="form-group ">
+                                <input v-model="name" style="background-color:rgba(255,255,255,0.4)" type="text "
+                                    autocomplete="off" class="form-control " name=" " placeholder="请输入用户名 ">
+                                <small v-if="isname==0" id="helpId " class="form-text text-muted text-danger">
+                                    <span class="text-danger">用户名已存在</span>
+                                </small>
+                            </div>
+                            <div class="form-group ">
+                                <input v-model="password" style="background-color:rgba(255,255,255,0.4)" type="password"
+                                    class="form-control " name="" placeholder="请输入密码 ">
+                            </div>
+                            <div class="form-group">
+                                <input v-model="tel" style="background-color:rgba(255,255,255,0.4)" type="text "
+                                    autocomplete="off" name="" id="tel" class="form-control" placeholder="请输入11位电话号码">
+                                <small id="mtel " class="form-text text-danger" style="display: none ">电话号码格式错误</small>
+                            </div>
+                            <div class="form-group">
+                                <input v-model="email" style="background-color:rgba(255,255,255,0.4)" type="text "
+                                    autocomplete="off" class="form-control" name="" id="email" placeholder="请输入电子邮箱">
+                                <small id="mtel " class="form-text text-danger" style="display: none ">邮箱格式错误</small>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 m-auto">
+                                    <a v-on:click="register()" type="button" style="background-color:rgba(255,255,255,0.8)"
+                                        class="btn btn-secondary mb-1 mt-3 btn-block" role="button">
+                                        <span class="text-dark">注册</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="float-right mt-2">
+                                <a href="Login"><small>已有账号，返回登录</small> </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                name: '',
+                password: '',
+                email: '',
+                tel: '',
+                pority: 0,
+                grade: '',
+                isname: 1,
+                m: 2,
+                x1: 3,
+                x2: 3,
+            },
+            methods: {
+                register: function () {
+                    if (this.name == '' || this.password == '' || this.email == '' || this.tel == '' ||
+                        this.x1 == 1 || this.x2 == 1) {
+                        window.alert("请将数据填完整")
+                    } else {
+                        axios.post("/user/register", {
+                                name: this.name,
+                                password: this.password,
+                                tel: this.tel,
+                                email: this.email,
+                                pority: this.pority,
+
+                            })
+                            .then((response) => {
+                                console.log(response);
+                                axios.get("user/registername")
+                                    .then((response) => {
+                                        console.log(response.data);
+                                        this.isname = response.data;
+                                        if (this.isname == 1) {
+                                            window.location.href = 'Login';
+                                        }
+                                    })
+                                    .catch((error) => {
+
+                                    })
+                            })
+                            .catch((error) => {
+                                console.log(error);
+
+                            })
+
+                    }
+                }
+
+            },
+            mounted() {
+                $('#tel').blur(() => {
+                    if (!$("#tel").val().match(/^1[3,5,7,8,9]\d{9}$/)) {
+                        $("#tel").next().show();
+                        this.x1 = 1;
+                    } else {
+                        $("#tel").next().hide();
+                        this.x1 = 0;
+                    }
+                });
+                $('#email').blur(() => {
+
+                    if (!$("#email").val().match(
+                            /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/)) {
+                        this.x2 = 1;
+                        $("#email").next().show();
+                    } else {
+                        $("#email").next().hide();
+                        this.x2 = 0;
+                    }
+                });
+            },
+
+        })
+    </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js " integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49 "
+        crossorigin="anonymous "></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js " integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em "
+        crossorigin="anonymous "></script>
+</body>
+
+</html>
